@@ -1,0 +1,46 @@
+// Поле ввода
+.tf {
+    position: relative;
+    width: 100%;
+}
+
+.tf__field {
+    position: relative;
+    width: 100%;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    background: #fff;
+    padding: 0 20px;
+}
+
+.tf input,
+.tf textarea {  
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    font-size: 14px;
+    background: none;
+    padding-left: 50px;
+}
+
+.tf label {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 300;
+    color: $tf-label;
+    margin-bottom: 8px;
+}
+
+._textfield-error {
+    
+    &::after {
+        content: attr(data-textfield-error);
+        display: inline-block;
+        font-size: 12px;
+        margin-top: 6px;
+        color: $error;
+    }
+}

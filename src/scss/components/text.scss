@@ -1,0 +1,22 @@
+.square-brackets {
+
+    &::before {
+        content: '[';
+        color: inherit;
+        margin-right: 4px;
+
+        @media (max-width: 350px) {
+            margin-right: 2px;
+        }
+    }
+
+    &::after {
+        content: ']';
+        color: inherit;
+        margin-left: 4px;
+
+        @media (max-width: 350px) {
+            margin-left: 2px;
+        }
+    }
+}

@@ -1,0 +1,99 @@
+@function findLightColor($color, $l: 96%) {
+    @if type-of($color) == 'color' {
+        @if lightness($color) > 96% {
+            $l: lightness($color);
+        }
+        @return change-color($color, $lightness: $l);
+    }
+    @return $background;
+}
+
+// Стиль скроллбара
+@mixin scrollbar($width: 16px, $thumb: #cecece, $track: transparent) {
+    body::-webkit-scrollbar {
+        width: $width;
+    }
+    
+    body::-webkit-scrollbar-track {
+        background: $track;
+    }
+    
+    body::-webkit-scrollbar-thumb {
+        background-color: $thumb;
+    }
+}
+
+// Стили выделения контента на сайте
+@mixin selection {
+    $prefixes: ':' ':-moz-';
+    @each $prefix in $prefixes {
+        :#{$prefix}selection {
+            @content;
+        }
+    }
+}
+
+// Стили placeholder
+@mixin placeholder {
+    $placeholders: ':moz' ':webkit-input' '-moz' '-ms-input';
+    @each $placeholder in $placeholders {
+        &:#{$placeholder}-placeholder {
+            @content;
+        }
+    }
+}
+
+// Генерирует цвет по указанной яркости
+@function brig-color($color, $brightness: 0) {
+    @if $brightness == 'hover' {
+        @return adjust-color($color, $lightness: -3%);
+    }
+    @if $brightness == 'active' {
+        @return adjust-color($color, $lightness: -5%);
+    }
+
+    @return adjust-color($color, $lightness: $brightness);
+}
+
+// Иконка загрузки
+@mixin loader {
+    content: "";
+    position: relative;
+    width: 1em;
+    height: 1em;
+    display: block;
+    border: 2px solid #cecece;
+    border-radius: 50%;
+    border-right-color: transparent;
+    border-top-color: transparent;
+    animation: spinAround 500ms infinite linear;
+}
+
+// Позиционирование на весь размер
+@mixin overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+// Позиционирование по центру по разным осям
+@mixin center($axis: xy) {
+    position: absolute;
+
+    @if $axis == xy and $axis == yx {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+    @else if $axis == x {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    @else if $axis == y {
+        top: 50%;
+        transform: translateY(-50%);
+        
+    }
+}
