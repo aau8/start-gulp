@@ -9,15 +9,15 @@
 </head>
 <body>
 	<div class="wrapper">
-		<header class="header"></header>
+        @@include('html/header.html',{})
+
 		<main class="main"></main>
-		<div class="content">
-            <img src="@img/main-logo.png" alt="" use-webp>
-        </div>
-		<footer class="footer"></footer>
-        <!-- @@include('./modules/footer.html') -->
+		<div class="content"></div>
+        
+        @@include('html/footer.html',{})
 	</div>
 
+    @@include('html/modals.html', {})
     <script src="./js/bundle.min.js"></script>
 </body>
 </html>

@@ -1,29 +1,102 @@
-@function findLightColor($color, $l: 96%) {
-    @if type-of($color) == 'color' {
-        @if lightness($color) > 96% {
-            $l: lightness($color);
-        }
-        @return change-color($color, $lightness: $l);
+// ШРИФТЫ
+@mixin font($fname, $fstyle, $fweight, $furl_woff2){
+    @font-face{
+        font-family: $fname;
+        font-style: $fstyle;
+        font-weight: $fweight;
+        font-stretch: 100%;
+        font-display: swap;
+        src: url($furl_woff2) format('woff2');
     }
-    @return $background;
+}
+//========================================================================================================================================================
+
+
+// ЦВЕТА ========================================================================================================================================================
+// Генерирует цвет по указанной яркости
+@function brig-color($color, $brightness: 0) {
+    @if $brightness == 'hover' {
+        @return adjust-color($color, $lightness: -3%);
+    }
+    @if $brightness == 'active' {
+        @return adjust-color($color, $lightness: -6%);
+    }
+
+    @return adjust-color($color, $lightness: 100% - ($brightness * 100%));
 }
 
-// Стиль скроллбара
-@mixin scrollbar($width: 16px, $thumb: #cecece, $track: transparent) {
-    body::-webkit-scrollbar {
+// Создать цвет rgba из hex
+@function create-rgba($color, $opacity) {
+    @return adjust-color($color, $alpha: -1 + $opacity);
+}
+//========================================================================================================================================================
+
+
+// ЕДИНИЦЫ ИЗМЕРЕНИЯ ========================================================================================================================================================
+//Percent
+@function percent($px, $from) {
+	$result: math.div($px, $from) * 100%;
+	@return $result;
+}
+//REM
+@function rem($px) {
+	$result: math.div($px, 16) + rem;
+	@return $result;
+}
+//EM
+@function em($px, $current: 16) {
+	$result: math.div($px, $current) + em;
+	@return $result;
+}
+// line-height в px переводит в %
+@function lhperc($font-size, $line-height-px) {
+    @return calc(round(calc($line-height-px / $font-size) * 10) / 10);
+}
+
+// Адаптивный размер
+@mixin resVal($property, $minSize, $maxSize, $minScreen, $maxScreen) {
+    @media (min-width: #{$minScreen}px) and (max-width: #{$maxScreen}px) {
+        #{$property}: calc( (100vw - #{$minScreen}px)/(#{$maxScreen} - #{$minScreen}) * (#{$maxSize} - #{$minSize}) + #{$minSize}px);
+    }
+}
+
+// Адаптивный размер только с максимальным медиа запросом
+@mixin resValNotMinWidth($property, $minSize, $maxSize, $minScreen, $maxScreen) {
+    @media (max-width: #{$maxScreen}px) {
+        #{$property}: calc( (100vw - #{$minScreen}px)/(#{$maxScreen} - #{$minScreen}) * (#{$maxSize} - #{$minSize}) + #{$minSize}px);
+    }
+}
+//========================================================================================================================================================
+
+
+// СЕТКА ========================================================================================================================================================
+// Grids
+@mixin gridCards($type: fit, $min: 280px, $max: 1fr, $gap: 30px) {
+	display: grid;
+	grid-template-columns: repeat(auto-#{$type}, minmax($min, $max));
+	gap: $gap;
+}
+//========================================================================================================================================================
+
+
+// ЭЛЕМЕНТЫ ========================================================================================================================================================
+// Скроллбар
+@mixin scrollbar($width: 16px, $height: 100%, $thumb: #cecece, $track: transparent) {
+    &::-webkit-scrollbar {
         width: $width;
+        height: $height;
     }
     
-    body::-webkit-scrollbar-track {
+    &::-webkit-scrollbar-track {
         background: $track;
     }
     
-    body::-webkit-scrollbar-thumb {
+    &::-webkit-scrollbar-thumb {
         background-color: $thumb;
     }
 }
 
-// Стили выделения контента на сайте
+// Выделение контента на сайте
 @mixin selection {
     $prefixes: ':' ':-moz-';
     @each $prefix in $prefixes {
@@ -33,7 +106,7 @@
     }
 }
 
-// Стили placeholder
+// Плейсхолдер
 @mixin placeholder {
     $placeholders: ':moz' ':webkit-input' '-moz' '-ms-input';
     @each $placeholder in $placeholders {
@@ -41,18 +114,6 @@
             @content;
         }
     }
-}
-
-// Генерирует цвет по указанной яркости
-@function brig-color($color, $brightness: 0) {
-    @if $brightness == 'hover' {
-        @return adjust-color($color, $lightness: -3%);
-    }
-    @if $brightness == 'active' {
-        @return adjust-color($color, $lightness: -5%);
-    }
-
-    @return adjust-color($color, $lightness: $brightness);
 }
 
 // Иконка загрузки
@@ -68,32 +129,4 @@
     border-top-color: transparent;
     animation: spinAround 500ms infinite linear;
 }
-
-// Позиционирование на весь размер
-@mixin overlay {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-}
-
-// Позиционирование по центру по разным осям
-@mixin center($axis: xy) {
-    position: absolute;
-
-    @if $axis == xy and $axis == yx {
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }
-    @else if $axis == x {
-        left: 50%;
-        transform: translateX(-50%);
-    }
-    @else if $axis == y {
-        top: 50%;
-        transform: translateY(-50%);
-        
-    }
-}
+//========================================================================================================================================================

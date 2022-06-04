@@ -10,7 +10,8 @@ export default {
         css: `${buildFolder}/css/`,
         html: `${buildFolder}/`,
         images: `${buildFolder}/img/`,
-        files: `${buildFolder}/files/`
+        convertImages: `./convert-images/`,
+        resources: `${buildFolder}/resources/`,
     },
 
     src: {
@@ -19,15 +20,19 @@ export default {
         html: `${srcFolder}/*.html`,
         images: `${srcFolder}/img/**/*.{jpg,jpeg,png,gif,webp}`,
         svg: `${srcFolder}/img/**/*.svg`,
-        files: `${srcFolder}/files/**/*.*`
+        svgIcons: `${srcFolder}/icons-to-sprite/**/*.svg`,
+        convertImages: `./convert-images/**/*.*`,
+        resources: `${srcFolder}/resources/**/*.*`,
     },
 
     watch: {
         js: `${srcFolder}/js/**/*.js`,
-        scss: `${srcFolder}/scss/**/*.scss`,
+        scss: `${srcFolder}/scss/**/*.{scss,sass,css}`,
         html: `${srcFolder}/**/*.html`,
-        images: `${srcFolder}/img/**/*.{jpg,jpeg,png,gif,webp,svg,ico}`,
-        files: `${srcFolder}/files/**/*.*`
+        images: `${srcFolder}/img/**/*.{jpg,jpeg,png,gif,webp}`,
+        convertImages: `convert-images/**/*.*`,
+        svg: `${srcFolder}/img/**/*.svg`,
+        resources: `${srcFolder}/resources/**/*.*`,
     },
 
     clean: buildFolder,

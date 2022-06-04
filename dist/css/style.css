@@ -1,3 +1,4 @@
+@charset "UTF-8";
 * {
   margin: 0;
   padding: 0;
@@ -7,36 +8,27 @@
 *,
 *:before,
 *:after {
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
   box-sizing: border-box;
-}
-
-:focus,
-:active {
-  outline: none;
-}
-
-:focus-visible {
-  outline: none;
-}
-
-nav,
-footer,
-header,
-aside {
-  display: block;
 }
 
 html,
 body {
-  height: 100%;
   width: 100%;
-  font-size: 100%;
-  line-height: 1;
+  height: 100%;
+  min-width: 320px;
+}
+
+body {
+  font-family: sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #333;
+  line-height: 1.2;
   -ms-text-size-adjust: 100%;
   -moz-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
@@ -47,18 +39,14 @@ textarea {
   color: inherit;
 }
 
-input::-ms-clear {
-  display: none;
-}
-
 input[type=submit] {
   cursor: pointer;
 }
 
 button {
-  background: none;
+  color: inherit;
+  background: inherit;
   cursor: pointer;
-  transition: 0.3s;
 }
 
 button::-moz-focus-inner {
@@ -71,6 +59,7 @@ a {
 }
 
 a,
+a:link,
 a:visited {
   text-decoration: none;
 }
@@ -87,7 +76,7 @@ ol li {
 img, svg {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
   vertical-align: top;
 }
 
@@ -106,20 +95,9 @@ h6 {
   font-weight: inherit;
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  font-family: "PT Serif", serif;
-  color: #333;
-  font-size: 14px;
-  font-weight: 400;
-  font-style: normal;
-  line-height: 1.2;
-}
-body._lock {
+._lock body {
   overflow: hidden;
+  touch-action: none;
 }
 
 .wrapper {
@@ -128,102 +106,177 @@ body._lock {
   min-height: 100%;
   display: flex;
   flex-direction: column;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 .wrapper > .content {
   flex: 1 0 auto;
   position: relative;
   z-index: 1;
-  display: flex;
 }
 
-.container {
-  max-width: 1248px;
-  width: 100%;
-  padding-left: 24px;
-  padding-right: 24px;
+/*
+(i) Стили будут применяться ко 
+всем классам содержащим *__container
+Например header__container, main__container и т.д.
+*/
+[class*=__container] {
+  max-width: 75rem;
+  box-sizing: content-box;
   margin: 0 auto;
+  padding: 0 0.75rem;
+}
+
+.burger {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  transition: 0.3s;
+}
+.burger span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 40%;
+  height: 2px;
+  display: block;
+  background: #333;
+  transition: 0.3s;
+}
+.burger span:nth-child(1) {
+  transform: translate(-50%, calc(-50% - 5px));
+}
+.burger span:nth-child(2) {
+  transform: translate(-50%, -50%);
+}
+.burger span:nth-child(3) {
+  transform: translate(-50%, calc(-50% + 5px));
+}
+.burger.is-active span:nth-child(1) {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+.burger.is-active span:nth-child(2) {
+  width: 0;
+}
+.burger.is-active span:nth-child(3) {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.section {
+  margin: 120px 0;
 }
 @media (max-width: 425px) {
-  .container {
-    padding-left: 16px;
-    padding-right: 16px;
+  .section {
+    margin: 80px 0;
+  }
+}
+
+.section_ms {
+  margin: 80px 0;
+}
+@media (max-width: 425px) {
+  .section_ms {
+    margin: 60px 0;
+  }
+}
+
+.section_fill {
+  padding: 50px 0;
+}
+
+.s-header {
+  margin-bottom: 40px;
+}
+@media (max-width: 425px) {
+  .s-header {
+    margin-bottom: 30px;
   }
 }
 
 .btn {
   position: relative;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 700;
+  padding: 0 20px;
+  border-radius: 4px;
   transition: 0.3s;
+  white-space: nowrap;
 }
-@media (max-width: 375px) {
-  .btn {
-    width: 168px;
-  }
-}
-@media (min-width: 769px) {
+@media (any-hover: hover) {
   .btn:hover {
-    transform: scale(1.05);
+    background: #000;
   }
-  .btn:hover .btn__text {
-    letter-spacing: 0.1em;
-  }
-}
-.btn:active {
-  transform: scale(0.95);
-}
-@media (min-width: 769px) {
-  .btn:active {
-    transform: scale(1);
-  }
-  .btn:active .btn__text {
-    letter-spacing: 0.05em;
-  }
-}
-.btn:active .btn__text {
-  letter-spacing: 0.03em;
 }
 
-.btn__bg {
-  position: absolute;
+.link {
+  transition: 0.3s;
+}
+@media (any-hover: hover) {
+  .link:hover {
+    color: #FFCD6D;
+  }
+}
+.link:active {
+  color: #ffc34e;
+}
+
+.tf {
+  position: relative;
+  width: 100%;
+}
+.tf.has-change-label .tf__field label {
   top: 0;
-  left: 0;
+  transform: translate(-16%, 0) scale(0.7);
+}
+
+.tf__field {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  background: none;
+}
+.tf__field_textarea {
+  height: 80px;
+}
+
+.tf__field input,
+.tf__field textarea {
   width: 100%;
   height: 100%;
+  font-size: 18px;
+  background: none;
+  border-bottom: 1px solid #fff;
+  padding: 24px 0 4px 0;
 }
 
-.btn__text {
+.tf__field label {
   position: absolute;
   top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: block;
-  text-transform: uppercase;
-  text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.7);
-  letter-spacing: 0.1em;
-  user-select: none;
+  left: 0;
+  transform: translate(0, -50%);
+  display: inline-block;
+  font-size: 18px;
+  font-weight: 100;
+  color: #fff;
+  pointer-events: none;
   transition: 0.3s;
-  white-space: nowrap;
-}
-@media (min-width: 769px) {
-  .btn__text {
-    letter-spacing: 0.05em;
-  }
 }
 
-.link-menu {
-  color: #fff;
-  transition: 0.3s;
-  text-shadow: none;
-  white-space: nowrap;
+.tf__field_textarea label {
+  top: 14px;
+  transform: translate(0, 0);
 }
-@media (min-width: 769px) {
-  .link-menu:hover {
-    color: #FFCD6D;
-    text-shadow: 0 0 13px #bc5026;
-  }
-}
-.link-menu:active {
-  color: #d38b00;
+
+._textfield-error::after {
+  content: attr(data-textfield-error);
+  display: inline-block;
+  font-size: 12px;
+  margin-top: 6px;
+  color: #EB5757;
 }
 
 .modal {
@@ -239,12 +292,12 @@ body._lock {
   opacity: 0;
   transition: 0.3s;
 }
-.modal._show {
+.modal.is-show {
   visibility: visible;
   opacity: 1;
   overflow-y: auto;
 }
-.modal._show .modal__wrap {
+.modal.is-show .modal__wrap {
   transform: translate(0, 0);
 }
 
@@ -271,6 +324,8 @@ body._lock {
   position: relative;
   max-width: 615px;
   width: 100%;
+  background: #fff;
+  padding: 24px;
 }
 
 .modal-close {
@@ -281,7 +336,7 @@ body._lock {
   height: 36px;
   transition: 0.3s;
 }
-@media (min-width: 769px) {
+@media (any-hover: hover) {
   .modal-close:hover {
     transform: scale(1.1);
   }
@@ -289,29 +344,70 @@ body._lock {
 .modal-close:active {
   transform: scale(0.9);
 }
-@media (min-width: 769px) {
+@media (any-hover: hover) {
   .modal-close:active {
     transform: scale(1);
   }
 }
 
-.square-brackets::before {
-  content: "[";
-  color: inherit;
-  margin-right: 4px;
+.acc-list {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
 }
-@media (max-width: 350px) {
-  .square-brackets::before {
-    margin-right: 2px;
-  }
+
+.acc {
+  display: block;
+  transition: 0.3s;
+  border-top: 1px solid #333;
+  border-bottom: 1px solid #333;
 }
-.square-brackets::after {
-  content: "]";
-  color: inherit;
-  margin-left: 4px;
+.acc.is-show > .acc__toggle .acc__toggle-icon {
+  transform: scale(-1, -1);
 }
-@media (max-width: 350px) {
-  .square-brackets::after {
-    margin-left: 2px;
-  }
+.acc.is-show > .acc__body {
+  opacity: 1;
+  visibility: visible;
+}
+
+.acc__toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.acc__toggle-title {
+  font-size: 16px;
+  font-weight: 100;
+  line-height: 1.3;
+  pointer-events: none;
+  transition: 0.3s;
+}
+
+.acc__toggle-icon {
+  position: relative;
+  min-width: 42px;
+  width: 42px;
+  height: 29px;
+  display: block;
+  margin-left: 16px;
+  transition: 0.3s;
+}
+
+.acc__body {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.3s;
+}
+
+.acc__content {
+  padding: 0 16px 16px;
 }

@@ -4,7 +4,9 @@ import del from 'del'
 import htmlBuild from './gulp/tasks/html.js'
 import cssBuild from './gulp/tasks/css.js'
 import jsBuild from './gulp/tasks/js.js'
-import imagesBuild from './gulp/tasks/images.js'
+import { imagesBuild, convertImages, imagesCopy } from './gulp/tasks/images.js'
+import resourcesBuild from './gulp/tasks/resources.js'
+import sprite from './gulp/tasks/svg-sprite.js'
 
 const { series, parallel, src, dest, watch } = gulp
 
@@ -35,6 +37,7 @@ function watchFiles() {
     watch(app.path.watch.scss, cssBuild);
     watch(app.path.watch.js, jsBuild);
     watch(app.path.watch.images, imagesBuild);
+    watch(app.path.watch.resources, resourcesBuild);
 }
 
 async function cleanDist() {
@@ -45,7 +48,8 @@ const tasks = series(
     htmlBuild,
     cssBuild,
     jsBuild,
-    imagesBuild
+    imagesBuild,
+    resourcesBuild,
 )
 
 export const dev = series(
@@ -62,13 +66,18 @@ export const prod = series(
     tasks,
 )
 
-export const prodNotImages = series(
+export const prodCopyImages = series(
     cleanDist,
     series(
         htmlBuild,
         cssBuild,
-        jsBuild
+        jsBuild,
+        imagesCopy,
+        resourcesBuild,
     )
 )
+
+export { convertImages }
+export { sprite }
 
 gulp.task('default', dev)

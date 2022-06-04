@@ -11,7 +11,7 @@
     opacity: 0;
     transition: $tr;
 
-    &._show {
+    &.is-show {
         visibility: visible;
         opacity: 1;
         overflow-y: auto;
@@ -45,6 +45,8 @@
     position: relative;
     max-width: 615px;
     width: 100%;
+    background: #fff;
+    padding: 24px;
 }
 
 .modal-close {
@@ -55,16 +57,16 @@
     height: 36px;
     transition: $tr;
 
-    &:hover {
+    @media (any-hover: hover) {
         
-        @media (min-width: $min-hover) {
+        &:hover {
             transform: scale(1.1);
         }
     }
 
     &:active {
 
-        @media (min-width: $min-hover) {
+        @media (any-hover: hover) {
             transform: scale(1);
         }
 

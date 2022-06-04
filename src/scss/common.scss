@@ -1,0 +1,96 @@
+// Бургер 
+.burger {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    transition: $tr;
+
+    & span {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 40%;
+        height: 2px;
+        display: block;
+        background: $text-primary;
+        transition: $tr;
+
+        &:nth-child(1) {
+            transform: translate(-50%, calc(-50% - 5px));
+        }
+
+        &:nth-child(2) {
+            transform: translate(-50%, -50%);
+        }
+
+        &:nth-child(3) {
+            transform: translate(-50%, calc(-50% + 5px));
+        }
+    }
+
+    &.is-active {
+
+        & span {
+
+            &:nth-child(1) {
+                transform: translate(-50%, -50%) rotate(45deg);
+            }
+    
+            &:nth-child(2) {
+                width: 0;
+            }
+    
+            &:nth-child(3) {
+                transform: translate(-50%, -50%) rotate(-45deg);
+            }
+        }
+    }
+}
+//========================================================================================================================================================
+
+
+// Раздел
+.section {
+    margin: 120px 0;
+
+    @media (max-width: $mobile-l) {
+        margin: 80px 0;
+    }
+}
+
+.section_ms {
+    margin: 80px 0;
+
+    @media (max-width: $mobile-l) {
+        margin: 60px 0;
+    }
+}
+
+.section_fill {
+    // background: $frame-dark;
+    padding: 50px 0;
+}
+//========================================================================================================================================================
+
+
+// Шапка раздела
+.s-header {
+    margin-bottom: 40px;
+
+    @media (max-width: $mobile-l) {
+        margin-bottom: 30px;
+    }
+}
+
+.s-header__title {
+    
+}
+
+.s-header__subtitle {
+    
+}
+
+.s-header__text {
+    
+}
+//========================================================================================================================================================
