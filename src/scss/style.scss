@@ -12,6 +12,7 @@ $text-primary: #333;
 $text-second: brig-color($text-primary, .7);
 $text-accent: #FFCD6D;
 $link-active: brig-color(#FFCD6D, active);
+$light: #fff;
 
 // Задний фон разделов
 // $frame-dark: #080A0A;
@@ -33,15 +34,16 @@ $tf-label: $text-second;
 $min-width: 320px;
 $max-width: 1920px;
 $max-width-container: 1200;
-$container-padding: 24;
+$container-padding: 48;
 $container-width: $max-width-container + $container-padding;
 
-$laptop-l: 1440px;
-$laptop: 1024px;
-$tablet: 768px;
-$mobile-l: 425px;
-$mobile-m: 375px;
-$mobile-s: 320px;
+$laptop-l: 1500px;
+$laptop: 1100px;
+$tablet: 800px;
+$mobile-l: 450px;
+$mobile-m: 390px;
+$mobile-s: 330px;
+$hide-menu: $tablet;
 // ================ Responsive End ================
 
 
@@ -90,6 +92,10 @@ body {
     }
     @if ($container-padding>0) {
         padding: 0 rem(math.div($container-padding, 2));
+    }
+
+    @media (max-width: $mobile-l) {
+        padding: 0 rem(16);
     }
 }
 

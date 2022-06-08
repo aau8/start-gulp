@@ -175,6 +175,69 @@ export function modal() {
 }
 //========================================================================================================================================================
 
+// Модальное окно
+// Кнопка, открывающая модалку
+// атрибут data-closing-on-bg, при указании которого модалка будет закрываться
+// 
+
+/**
+ * INFO: Свойства
+ * // Атрибуты
+ * data-modal-id="<id-modal>" - каждая модалка имеет этот атрибут, в котором мы указываем ее id
+ * data-modal-open="<id-modal>" - имеет элемент, при нажатии на который открывается модалка
+ * data-modal-close="<id-modal || null>" - имеет элемент, при нажатии на который, модальное окно закрывается. Если елемент находится внутри модалки, которую он должен закрыть, в значении атрибута указывать id модалки необязательно (можно оставить его пустым). Значение стоит указывать, если элемент, который должен закрыть модалку, находится вне контейнера с атрибутом data-modal-id
+ * data-close-on-bg
+ * 
+ * INFO: Геттеры
+ * 
+ * 
+ * INFO: Сеттеры
+ * 
+ * 
+ * INFO: Функции
+ */
+class Modal {
+    constructor(selector, options) {
+        this.$el = (typeof selector === 'string') ? document.querySelector(selector) : selector
+    }
+}
+
+// class User {
+
+//     constructor(name) {
+//       // вызывает сеттер
+//       this.name = name;
+//     }
+  
+//     get name() {
+//         console.log('get')
+//         return this._name;
+//     }
+  
+//     set name(value) {
+//         console.log('set')
+//         if (value.length < 4) {
+//             console.log("Имя слишком короткое.");
+//             return;
+//         }
+//         this._name = value;
+//     }
+  
+// }
+  
+// let user = new User("Иван");
+// console.log(user)
+// console.log(user.name); // Иван
+// user.name = "Николай"
+// console.log(user.name); // Иван
+
+// console.log(user)
+
+
+
+
+
+
 
 // Табы
 // data-tab - указывается у контейнера с карточками и табами

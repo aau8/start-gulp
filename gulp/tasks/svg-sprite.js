@@ -5,6 +5,8 @@ export default function sprite() {
 	return gulp.src(app.path.src.svgIcons)
 		.pipe(svgSprite({
 			mode: {
+                // inline: true,
+                // symbol: true,
 				symbol: {
 					sprite: '../img/sprite.svg',
 					// example: true
@@ -28,11 +30,11 @@ export default function sprite() {
 				// ]
 			},
 			svg: {
-				rootAttributes: {
-					"style": "display: none;",
-					"aria-hidden": true
-				},
-				xmlDeclaration: false
+                xmlDeclaration: false
+			// 	rootAttributes: {
+			// 		"style": "display: none;",
+			// 		"aria-hidden": true
+			// 	},
 			}
 		}))
 		.pipe(gulp.dest(app.path.srcFolder));

@@ -5,7 +5,7 @@ import DismalModules from "./utils/modules.js"
 // DismalModules.acc()
 
 // Модальные окна
-// DismalModules.modal()
+DismalModules.modal()
 
 // Табы
 // DismalModules.tabs()
