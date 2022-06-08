@@ -37,6 +37,7 @@ function watchFiles() {
     watch(app.path.watch.scss, cssBuild);
     watch(app.path.watch.js, jsBuild);
     watch(app.path.watch.images, imagesBuild);
+    watch(app.path.watch.svg, imagesBuild);
     watch(app.path.watch.resources, resourcesBuild);
 }
 

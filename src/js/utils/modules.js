@@ -49,128 +49,208 @@ export function acc() {
 //========================================================================================================================================================
 
 
-// Модальные окна
-// data-close-on-bg - закрывать модалку при клике по фону
-// data-modal-close - указывать у кнопок, при клике по которым, нужно закрыть модалку
-// data-modal-open - элементы, открывающие модальное окно
-// data-modal-id - идентификатор модального окна
-export function modal() {
-    // Открытие модальных окон при клике по кнопке
-    openModalWhenClickingOnBtn()
-    function openModalWhenClickingOnBtn() {
-        window.addEventListener('click', e => {
-            const target = e.target
-
-            if (target.dataset.modalOpen != undefined || target.closest('[data-modal-open]')) {
-                const btn = target.closest('[data-modal-open]') ? target.closest('[data-modal-open]') : target;
-                const dataBtn = btn.dataset.modalOpen;
-                const modal = document.querySelector(`#${dataBtn}`)
-
-                e.preventDefault()
-                window.location.hash = dataBtn
-            }
-        })
+/**
+ * Модальное окно 
+ * 
+ * INFO: Атрибуты (все атрибуты находятся в св-ве attrs)
+ * data-modal-id="<id-modal>" - (modalId) каждая модалка имеет этот атрибут, в котором мы указываем ее id
+ * data-close-on-bg - (modalCloseOnBg) модалка, которая должна закрываться при клике по ее фону, должна иметь этот атрибут
+ * data-modal-open="<id-modal>" - (btnModalOpen) имеет элемент, при нажатии на который открывается модалка
+ * data-modal-close="<id-modal || Null>" - (btnModalClose) имеет элемент, при нажатии на который, модальное окно закрывается. Если елемент находится внутри модалки, которую он должен закрыть, в значении атрибута указывать id модалки необязательно (можно оставить его пустым). Значение стоит указывать, если элемент, который должен закрыть модалку, находится вне контейнера с атрибутом data-modal-id
+ * 
+ * INFO: Свойства
+ * attrs - (Object) названия атрибутов
+ * classNames - (Object) названия классов
+ * modalList - (NodeList) список всех модальных окон (для обновления списка использовать updateModalList())
+ * openingBtnList - (NodeList) список открывающих кнопок
+ * modalIsShow - (Boolean) модальное окно показано
+ * modalShow - (Element) показанное модальное окно
+ * modalShowId - (String) id показанного модального окна
+ * keyEsc - (Boolean) закрывать модалки при нажатии клавиши Esc. По умолчанию - true
+ * useHash - (Boolean) использовать хеш. Если в url указан хеш равный id модалки, модалка откроется. По умолчанию - true
+ * historyHash - (Boolean) сохранять хеш в истории браузера. Если useHash === false, то historyHash будет равен false. По умолчанию - false
+ * hash - (String) значение хеша
+ * 
+ * INFO: Функции
+ * open(<String || Element>) - метод, открывающий модалку
+ * close(<String || Element || Null>) - метод, закрывающий модалку. Если скобки оставить пустыми, закроется открытая модалка
+ * update() - метод, обновляющий список модалок (this.modalList) и список кнопок (this.openingBtnList)
+ * updateModalList() - метод, обновляющий список модалок (this.modalList)
+ * updateOpeningBtnList() - метод, обновляющий список кнопок (this.openingBtnList)
+ * 
+ * 
+ * TODO: Атрибуты data-modal-hash и data-modal-hash-history. В случае если this.useHash === false:
+ * data-modal-hash - указывается у модалки, которая должна открываться по хешу
+ * data-modal-hash-history - указывается у модалки, которая должна быть сохранена в истории ( использовать вместе с первым атрибутом )
+ */
+export class Modals {
+    attrs = {
+        modalId: 'data-modal-id',
+        modalCloseOnBg: 'data-close-on-bg',
+        btnModalOpen: 'data-modal-open',
+        btnModalClose: 'data-modal-close',
     }
-
-    // Открытие модального окна, если в url указан его id
-    openModalHash()
-    function openModalHash() {
-        if (window.location.hash) {
-            const hash = window.location.hash.substring(1)
-            const modal = document.querySelector(`.modal[data-modal-id=${hash}]`)
+    classNames = {
+        modalShow: 'is-show',
+        modalBg: 'modal__bg',
+    }
+    modalList = document.querySelectorAll(`[${this.attrs.modalId}]`)
+    openingBtnList = document.querySelectorAll(`[${this.attrs.btnModalOpen}]`)
+    modalIsShow = false
+    modalShow = null
+    modalShowId = null
+    keyEsc = true
+    useHash = true
+    historyHash = !this.useHash ? false : false
+    hash = null
     
-            if (modal) openModal(modal)
+    constructor(options) {
+        this.init()
+    }
+
+    // Инизиализация Modal
+    init() {
+        this.btnOpen()
+        this.btnClose()
+        if (this.keyEsc) this.keyEscClose()
+        if (this.useHash) this.watchHash()
+    }
+
+    // Открыть модальное окно
+    open(modal) {        
+        if (typeof modal === 'string') {
+            modal = document.querySelector(`[${this.attrs.modalId}=${modal}]`)
         }
-    }
 
-    // Показываем/убираем модальное окно при изменения хеша в адресной строке
-    checkHash()
-    function checkHash() {
-        window.addEventListener('hashchange', e => {
-            const hash = window.location.hash.replace('#', '')
-            const modal = document.querySelector(`.modal[data-modal-id="${hash}"]`)
-
-            e.preventDefault()
-
-            if (modal && hash != '') {
-                if (document.querySelector('.modal.is-show')) {
-                    closeModal(document.querySelector('.modal.is-show'), false)
-                }
-                
-                openModal(modal)
-            }
-            else {
-
-                if (document.querySelector('.modal.is-show')) {
-                    closeModal(document.querySelector('.modal.is-show'))
-                }
-            }
-        })
-    }
-
-    // Закрытие модального окна при клике по заднему фону
-    closeModalWhenClickingOnBg()
-    function closeModalWhenClickingOnBg() {
-        document.addEventListener('click', (e) => {
-            const target = e.target
-
-            if (target.classList.contains('modal__bg') && target.closest('.modal[data-close-on-bg]')) {
-                closeModal(target.closest('.modal'))
-                clearHash()
-            }
-        })
-    }
-
-    // Закрытие модальных окон при клике по крестику
-    closeModalWhenClickingOnCross()
-    function closeModalWhenClickingOnCross() {
-        window.addEventListener('click', e => {
-            const target = e.target
-
-            if (target.classList.contains('[data-modal-close]') || target.closest('[data-modal-close]')) {
-                closeModal(target.closest('.modal'))
-                clearHash()
-            }
-        })
-    }
-
-    // Закрытие модальных окон при нажатии по клавише ESC
-    closeModalWhenClickingOnESC()
-    function closeModalWhenClickingOnESC() {
-        const modalElems = document.querySelectorAll('.modal')
-        for (let i = 0; i < modalElems.length; i++) {
-            const modal = modalElems[i];
-    
-            document.addEventListener('keydown', e => {
-                if (e.key === 'Escape') {
-                    closeModal(modal)
-                    clearHash()
-                }
-            })
-        }
-    }
-
-    // Сброс id модального окна в url
-    function clearHash() {
-        const windowTop = window.pageYOffset
-        const href = location.href.replace(/#[\w-]+/, '');
-        history.pushState({}, '', href)
-        window.scrollTo(0, windowTop)
-    }
-
-    // Открытие модального окна
-    function openModal(modal) {
-        modal.classList.add('is-show')
+        this.modalIsShow = true
+        this.modalShow = modal
+        this.modalShowId = modal.dataset.modalId
+        
+        this.modalBgClose()
+        modal.classList.add(this.classNames.modalShow)
         bodyLock()
     }
 
-    // Закрытие модального окна
-    function closeModal(modal, unlockBody) {
-        modal.classList.remove('is-show')
-
-        if (unlockBody != false) {
-            bodyUnlock()
+    // Закрыть модальное окно
+    close(modal) {
+        if (typeof modal === 'undefined') {
+            if (this.modalShow != null) {
+                modal = this.modalShow
+            }
+            else {
+                console.error('[Modals]: Все модальные окна закрыты')
+                return
+            }
         }
+        if (typeof modal === 'string') {
+            modal = document.querySelector(`[${this.attrs.modalId}=${modal}]`)
+        }
+        if (this.modalShow.dataset.closeOnBg != undefined) {
+            this._modalBg.removeEventListener('click', this._bgEvent)
+        }
+        
+        this.modalIsShow = false
+        this.modalShow = null
+        this.modalShowId = null
+        
+        modal.classList.remove(this.classNames.modalShow)
+        bodyUnlock()
+    }
+    
+    // Открыть модалку при клике по кнопке c атрибутом this.attrs.btnModalOpen
+    btnOpen() {
+        document.addEventListener('click', e => {
+            if (e.target.dataset.modalOpen != undefined || e.target.closest(`[${this.attrs.btnModalOpen}]`)) {
+                const btnOpenModal = e.target.dataset.modalOpen != undefined ? e.target : e.target.closest(`[${this.attrs.btnModalOpen}]`)
+    
+                this.open(btnOpenModal.dataset.modalOpen)
+                if (this.useHash) this.setHash()
+            }
+        })
+    }
+
+    // Закрыть модалку при клике по кнопке с атрибутом this.attrs.btnModalClose
+    btnClose() {
+        document.addEventListener('click', e => {
+            if (e.target.dataset.modalClose != undefined || e.target.closest(`[${this.attrs.btnModalClose}]`)) {
+                if (this.useHash) this.clearHash()
+                this.close(document.querySelector(`[${this.attrs.modalId}=${this.modalShowId}]`))
+            }
+        })
+    }
+
+    // Закрытие модалки при клике по фону. Работает только у модалок, у которых ест атрибут this.attrs.modalCloseOnBg
+    modalBgClose() {
+        if (this.modalShow.dataset.closeOnBg === undefined) return
+
+        this._modalBg = this.modalShow.querySelector(`.${this.classNames.modalBg}`)
+        this._bgEvent = () => {
+            if (this.useHash) this.clearHash()
+            this.close(this.modalShow)
+        }
+
+        this._modalBg.addEventListener('click', this._bgEvent, { once: true })
+    }
+
+    // Закрытие модалки при нажатии клавиши Esc
+    keyEscClose() {
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') {
+                if (this.useHash) this.clearHash()
+                this.close()
+            }
+        })
+    }
+
+    // Следим за хешем
+    watchHash() {
+        this.checkHash()
+        if (this.historyHash) {
+            window.addEventListener('hashchange', e => {
+                this.checkHash()
+            })
+        }
+    }
+    
+    // Проверка хеша
+    checkHash() {
+        const hash = window.location.hash.replace('#', '')
+        this.hash = (hash === '') ? null : hash
+    
+        if (hash != '') {
+            this.open(hash)
+        }
+        if (hash === '' && this.historyHash && this.modalShow) {
+            this.close()
+        }
+    }
+
+    // Установка хеша, равного id модалки
+    setHash() {
+        const href = location.href + '#' + this.modalShowId
+        history[this.historyHash ? 'pushState' : 'replaceState']({}, '', href)
+    }
+
+    // Удаление хеша
+    clearHash() {
+        const href = location.href.replace(/#[\w-]+/, '');
+        history[this.historyHash ? 'pushState' : 'replaceState']({}, '', href)
+    }
+
+    // Обновляет список модалок и кнопок
+    update() {
+        this.updateModalList()
+        this.updateOpeningBtnList()
+    }
+
+    // Обновить список модальных окон
+    updateModalList() {
+        this.modalList = document.querySelectorAll(`[${this.attrs.modalId}]`)
+    }
+
+    // Обновить список кнопок, открывающих модальные окна
+    updateOpeningBtnList() {
+        this.openingBtnList = document.querySelectorAll(`[${this.attrs.btnModalOpen}]`)
     }
 }
 //========================================================================================================================================================
@@ -374,11 +454,12 @@ export function onlyDigit() {
 
 export default {
     acc,
-    modal,
+    // modal,
     tabs,
     labelTextfield,
     select,
     arrowUp,
     fixElemOverFooter,
     onlyDigit,
+    Modals
 }

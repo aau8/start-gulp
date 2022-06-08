@@ -1,16 +1,16 @@
 // Основной шаблон кнопки
 .btn {
-    position: relative;
-    height: 42px;
+    height: 54px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 700;
-    padding: 0 20px;
-    border-radius: 4px;
+    padding: 0 50px;
+    border-radius: 50px;
     transition: $tr;
     white-space: nowrap;
+    user-select: none;
 
 	@media (any-hover: hover) {
         

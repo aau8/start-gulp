@@ -1,15 +1,3 @@
-// Сокращенная запись нахождения одного элемента
-export function find(selector) {
-    return document.querySelector(selector)
-}
-//========================================================================================================================================================
-
-// Сокращенная запись нахождения нескольких элементов
-export function findAll(selectors) {
-    return document.querySelectorAll(selectors)
-}
-//========================================================================================================================================================
-
 // Удаляет у всех элементов items класс itemClass
 export function removeAllClasses(items, itemClass) {
     if (typeof items == "string") {
