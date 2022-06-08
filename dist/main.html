@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="./css/style.css?_v=20220608105833">
+    <link rel="stylesheet" href="./css/style.css?_v=20220608155247">
 </head>
 <body>
 	<div class="wrapper">
@@ -14,7 +14,11 @@
 </header>
 
 		<main class="main"></main>
-		<div class="content"></div>
+		<div class="content">
+            <button data-modal-open="modal">Open modal</button>
+            <button data-modal-open="modal2">Open modal2</button>
+            <!-- <button id="update">Update modal</button> -->
+        </div>
 
         <footer class="footer">
     
@@ -24,7 +28,7 @@
     <div class="modal" data-modal-id="modal" data-close-on-bg>
     <div class="modal__wrap">
         <div class="modal__window">
-
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum adipisci deserunt atque quis! Iure autem aut impedit velit? Maxime non quo voluptate porro doloribus officia ea accusamus harum ab alias!</p>
             <button class="burger is-active modal-close" data-modal-close>
                 <span></span>
                 <span></span>
@@ -34,6 +38,21 @@
         <div class="modal__bg"></div>
     </div>
 </div>
-    <script src="./js/bundle.min.js?_v=20220608105833"></script>
+
+<div class="modal" data-modal-id="modal2" data-close-on-bg>
+    <div class="modal__wrap">
+        <div class="modal__window">
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum adipisci deserunt atque quis! Iure autem aut impedit velit? Maxime non quo voluptate porro doloribus officia ea accusamus harum ab alias!</p>
+            <button data-modal-open="modal">Open modal</button>
+            <button class="burger is-active modal-close" data-modal-close>
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+        <div class="modal__bg"></div>
+    </div>
+</div>
+    <script src="./js/bundle.min.js?_v=20220608155247"></script>
 </body>
 </html>
