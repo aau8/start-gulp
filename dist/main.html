@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="./css/style.css?_v=20220609145601">
+    <link rel="stylesheet" href="./css/style.css?_v=20220609153812">
 </head>
 <body>
 	<div class="wrapper">
@@ -14,10 +14,37 @@
 </header>
 
 		<main class="main"></main>
-		<div class="content">
-            <button data-modal-open="modal">Open modal</button>
-            <button data-modal-open="modal2">Open modal2</button>
-            <!-- <button id="update">Update modal</button> -->
+		<div class="content" data-acc-hidden-sibling>
+            <div class="acc">
+                <button class="acc__toggle" data-acc-toggle>
+                    <span class="acc__toggle-title">Вопрос</span>
+                    <span class="acc__toggle-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M6 9L12.0001 15L18 9" stroke="#6C6C6C" stroke-width="2"/>
+                        </svg>
+                    </span>
+                </button>
+                <div class="acc__body" data-acc-body>
+                    <div class="acc__content">
+                        <p>Ответ на вопрос</p>
+                    </div>
+                </div>
+            </div>
+            <div class="acc">
+                <button class="acc__toggle" data-acc-toggle>
+                    <span class="acc__toggle-title">Вопрос</span>
+                    <span class="acc__toggle-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M6 9L12.0001 15L18 9" stroke="#6C6C6C" stroke-width="2"/>
+                        </svg>
+                    </span>
+                </button>
+                <div class="acc__body" data-acc-body>
+                    <div class="acc__content">
+                        <p>Ответ на вопрос</p>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <footer class="footer">
@@ -25,7 +52,7 @@
 </footer>
 	</div>
 
-    <div class="modal" data-modal-id="modal" data-close-on-bg>
+    <!-- <div class="modal" data-modal-id="modal" data-close-on-bg>
     <div class="modal__wrap">
         <div class="modal__window">
             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum adipisci deserunt atque quis! Iure autem aut impedit velit? Maxime non quo voluptate porro doloribus officia ea accusamus harum ab alias!</p>
@@ -37,7 +64,7 @@
         </div>
         <div class="modal__bg"></div>
     </div>
-</div>
-    <script src="./js/bundle.min.js?_v=20220609145601"></script>
+</div> -->
+    <script src="./js/bundle.min.js?_v=20220609153812"></script>
 </body>
 </html>

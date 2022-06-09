@@ -6,51 +6,72 @@ import { bodyLock, bodyUnlock, bodyLockToggle, removeAllClasses, getSiblings } f
 // data-acc-hidden-sibling - аккордеоны будут скрываться при выборе других аккордеонов. !Атрибут указывается у контейнера (acc-list), в котором находятся аккордеоны
 // data-acc-open="<acc-id>" - указывать у элемента, при клике по которому будет открываться указанный аккордеон (в паре обязательно использовать data-acc-id)
 // data-acc-id="<acc-id>" - указывать у аккордеона, если планируется использовать data-acc-open. А так, необязательно
-// export function acc() {
-//     window.addEventListener("click", accDo)
+export function acc() {
+    window.addEventListener("click", accDo)
     
-//     function accDo(e) {
-//         const dataAccOpen = e.target.getAttribute('data-acc-open')
+    function accDo(e) {
+        const dataAccOpen = e.target.getAttribute('data-acc-open')
 
-//         if (e.target.getAttribute('data-acc-toggle') || e.target.closest('[data-acc-toggle]') || dataAccOpen != null) {
-//             const accToggle = dataAccOpen != null ? document.querySelector(`[data-acc-id=${dataAccOpen}] [data-acc-toggle]`) : e.target
-//             const accContainer = !accToggle.closest("[data-acc-body]") ? accToggle.parentElement.parentElement : accToggle.closest("[data-acc-body]")
-//             const accElem = accToggle.parentElement
-//             const accBody = accToggle.nextElementSibling
+        if (e.target.getAttribute('data-acc-toggle') || e.target.closest('[data-acc-toggle]') || dataAccOpen != null) {
+            const accToggle = dataAccOpen != null ? document.querySelector(`[data-acc-id=${dataAccOpen}] [data-acc-toggle]`) : e.target
+            const accContainer = !accToggle.closest("[data-acc-body]") ? accToggle.parentElement.parentElement : accToggle.closest("[data-acc-body]")
+            const accElem = accToggle.parentElement
+            const accBody = accToggle.nextElementSibling
         
-//             if (accBody.style.maxHeight) {
-//                 accBody.style.maxHeight = null
-//                 accElem.classList.remove("is-show")
-//             } else {
-//                 const adjacentElems = getSiblings(accElem)
-//                 const accHiddenSibling = accContainer.dataset.accHiddenSibling
+            if (accBody.style.maxHeight) {
+                accBody.style.maxHeight = null
+                accElem.classList.remove("is-show")
+            } 
+            else {
+                const adjacentElems = getSiblings(accElem)
+                const accHiddenSibling = accContainer.dataset.accHiddenSibling
     
-//                 accElem.classList.add("is-show")
+                accElem.classList.add("is-show")
     
-//                 if (accHiddenSibling != undefined && accHiddenSibling != 'false') {
+                if (accHiddenSibling != undefined && accHiddenSibling != 'false') {
     
-//                     for (let i = 0; i < adjacentElems.length; i++) {
-//                         const elem = adjacentElems[i]
-//                         const elemHeader = elem.querySelector("[data-acc-toggle]")
-//                         const elemBody = elem.querySelector("[data-acc-body]")
+                    for (let i = 0; i < adjacentElems.length; i++) {
+                        const elem = adjacentElems[i]
+                        const elemHeader = elem.querySelector("[data-acc-toggle]")
+                        const elemBody = elem.querySelector("[data-acc-body]")
     
-//                         elem.classList.remove("is-show")
-//                         elemHeader.classList.remove("is-show")
-//                         elemBody.style.maxHeight = null
-//                     }
-//                 }
+                        elem.classList.remove("is-show")
+                        elemHeader.classList.remove("is-show")
+                        elemBody.style.maxHeight = null
+                    }
+                }
     
-//                 accBody.style.maxHeight = accBody.scrollHeight + "px"
-//                 accContainer.style.maxHeight = parseInt(accContainer.scrollHeight) + accBody.scrollHeight + "px"
-//             }
-//         }
-//     }
-// }
+                accBody.style.maxHeight = accBody.scrollHeight + "px"
+                accContainer.style.maxHeight = parseInt(accContainer.scrollHeight) + accBody.scrollHeight + "px"
+            }
+        }
+    }
+}
 //========================================================================================================================================================
 
-class Accordion {
+/**
+ * Аккордион
+ * 
+ * Основной функционал:
+ * Открытие/закрытие аккордеона
+ * При открытии аккордеона, закрываются все соседнии.
+ */
+export class Accordions {
     constructor() {
-        
+
+        this.init()
+    }
+
+    init() {
+
+    }
+
+    open() {
+
+    }
+
+    close() {
+
     }
 }
 
@@ -116,15 +137,15 @@ export class Modals {
     hash = null
     
     constructor(options) {
-        this.init()
+        this._init()
     }
 
     // Инизиализация Modal
-    init() {
-        this.btnOpen()
-        this.btnClose()
-        if (this.keyEsc) this.keyEscClose()
-        if (this.useHash) this.watchHash()
+    _init() {
+        this._btnOpen()
+        this._btnClose()
+        if (this.keyEsc) this._keyEscClose()
+        if (this.useHash) this._watchHash()
     }
 
     // Открыть модальное окно
@@ -137,7 +158,7 @@ export class Modals {
         this.modalShow = modal
         this.modalShowId = modal.dataset.modalId
         
-        this.modalBgClose()
+        this._modalBgClose()
         modal.classList.add(this.classNames.modalShow)
         bodyLock()
     }
@@ -169,34 +190,34 @@ export class Modals {
     }
     
     // Открыть модалку при клике по кнопке c атрибутом this.attrs.btnModalOpen
-    btnOpen() {
+    _btnOpen() {
         document.addEventListener('click', e => {
             if (e.target.dataset.modalOpen != undefined || e.target.closest(`[${this.attrs.btnModalOpen}]`)) {
                 const btnOpenModal = e.target.dataset.modalOpen != undefined ? e.target : e.target.closest(`[${this.attrs.btnModalOpen}]`)
     
                 this.open(btnOpenModal.dataset.modalOpen)
-                if (this.useHash) this.setHash()
+                if (this.useHash) this._setHash()
             }
         })
     }
 
     // Закрыть модалку при клике по кнопке с атрибутом this.attrs.btnModalClose
-    btnClose() {
+    _btnClose() {
         document.addEventListener('click', e => {
             if (e.target.dataset.modalClose != undefined || e.target.closest(`[${this.attrs.btnModalClose}]`)) {
-                if (this.useHash) this.clearHash()
+                if (this.useHash) this._clearHash()
                 this.close(document.querySelector(`[${this.attrs.modalId}=${this.modalShowId}]`))
             }
         })
     }
 
     // Закрытие модалки при клике по фону. Работает только у модалок, у которых ест атрибут this.attrs.modalCloseOnBg
-    modalBgClose() {
+    _modalBgClose() {
         if (this.modalShow.dataset.closeOnBg === undefined) return
 
         this._modalBg = this.modalShow.querySelector(`.${this.classNames.modalBg}`)
         this._bgEvent = () => {
-            if (this.useHash) this.clearHash()
+            if (this.useHash) this._clearHash()
             this.close(this.modalShow)
         }
 
@@ -204,27 +225,27 @@ export class Modals {
     }
 
     // Закрытие модалки при нажатии клавиши Esc
-    keyEscClose() {
+    _keyEscClose() {
         document.addEventListener('keydown', e => {
             if (e.key === 'Escape') {
-                if (this.useHash) this.clearHash()
+                if (this.useHash) this._clearHash()
                 this.close()
             }
         })
     }
 
     // Следим за хешем
-    watchHash() {
-        this.checkHash()
+    _watchHash() {
+        this._checkHash()
         if (this.historyHash) {
             window.addEventListener('hashchange', e => {
-                this.checkHash()
+                this._checkHash()
             })
         }
     }
     
     // Проверка хеша
-    checkHash() {
+    _checkHash() {
         const hash = window.location.hash.replace('#', '')
         this.hash = (hash === '') ? null : hash
     
@@ -237,13 +258,13 @@ export class Modals {
     }
 
     // Установка хеша, равного id модалки
-    setHash() {
+    _setHash() {
         const href = location.origin + location.pathname + '#' + this.modalShowId
         history[this.historyHash ? 'pushState' : 'replaceState']({}, '', href)
     }
 
     // Удаление хеша
-    clearHash() {
+    _clearHash() {
         const href = location.href.replace(/#[\w-]+/, '');
         history[this.historyHash ? 'pushState' : 'replaceState']({}, '', href)
     }
@@ -465,11 +486,12 @@ export function onlyDigit() {
 
 export default {
     acc,
+    Modals,
+    Accordions,
     tabs,
     labelTextfield,
     select,
     arrowUp,
     fixElemOverFooter,
     onlyDigit,
-    Modals
 }

@@ -2,7 +2,8 @@ import { removeAllClasses, bodyLock } from "./utils/functions.js"
 import DismalModules from "./utils/modules.js"
 
 // Аккордеон
-// DismalModules.acc()
+DismalModules.acc()
+const accordions = new DismalModules.Accordions()
 
 // Модальные окна
 const modals = new DismalModules.Modals()
