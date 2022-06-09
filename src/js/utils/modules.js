@@ -6,48 +6,53 @@ import { bodyLock, bodyUnlock, bodyLockToggle, removeAllClasses, getSiblings } f
 // data-acc-hidden-sibling - аккордеоны будут скрываться при выборе других аккордеонов. !Атрибут указывается у контейнера (acc-list), в котором находятся аккордеоны
 // data-acc-open="<acc-id>" - указывать у элемента, при клике по которому будет открываться указанный аккордеон (в паре обязательно использовать data-acc-id)
 // data-acc-id="<acc-id>" - указывать у аккордеона, если планируется использовать data-acc-open. А так, необязательно
-export function acc() {
-    window.addEventListener("click", accDo)
+// export function acc() {
+//     window.addEventListener("click", accDo)
     
-    function accDo(e) {
-        const dataAccOpen = e.target.getAttribute('data-acc-open')
+//     function accDo(e) {
+//         const dataAccOpen = e.target.getAttribute('data-acc-open')
 
-        if (e.target.getAttribute('data-acc-toggle') || e.target.closest('[data-acc-toggle]') || dataAccOpen != null) {
-            const accToggle = dataAccOpen != null ? document.querySelector(`[data-acc-id=${dataAccOpen}] [data-acc-toggle]`) : e.target
-            const accContainer = !accToggle.closest("[data-acc-body]") ? accToggle.parentElement.parentElement : accToggle.closest("[data-acc-body]")
-            const accElem = accToggle.parentElement
-            const accBody = accToggle.nextElementSibling
+//         if (e.target.getAttribute('data-acc-toggle') || e.target.closest('[data-acc-toggle]') || dataAccOpen != null) {
+//             const accToggle = dataAccOpen != null ? document.querySelector(`[data-acc-id=${dataAccOpen}] [data-acc-toggle]`) : e.target
+//             const accContainer = !accToggle.closest("[data-acc-body]") ? accToggle.parentElement.parentElement : accToggle.closest("[data-acc-body]")
+//             const accElem = accToggle.parentElement
+//             const accBody = accToggle.nextElementSibling
         
-            if (accBody.style.maxHeight) {
-                accBody.style.maxHeight = null
-                accElem.classList.remove("is-show")
-            } else {
-                const adjacentElems = getSiblings(accElem)
-                const accHiddenSibling = accContainer.dataset.accHiddenSibling
+//             if (accBody.style.maxHeight) {
+//                 accBody.style.maxHeight = null
+//                 accElem.classList.remove("is-show")
+//             } else {
+//                 const adjacentElems = getSiblings(accElem)
+//                 const accHiddenSibling = accContainer.dataset.accHiddenSibling
     
-                accElem.classList.add("is-show")
+//                 accElem.classList.add("is-show")
     
-                if (accHiddenSibling != undefined && accHiddenSibling != 'false') {
+//                 if (accHiddenSibling != undefined && accHiddenSibling != 'false') {
     
-                    for (let i = 0; i < adjacentElems.length; i++) {
-                        const elem = adjacentElems[i]
-                        const elemHeader = elem.querySelector("[data-acc-toggle]")
-                        const elemBody = elem.querySelector("[data-acc-body]")
+//                     for (let i = 0; i < adjacentElems.length; i++) {
+//                         const elem = adjacentElems[i]
+//                         const elemHeader = elem.querySelector("[data-acc-toggle]")
+//                         const elemBody = elem.querySelector("[data-acc-body]")
     
-                        elem.classList.remove("is-show")
-                        elemHeader.classList.remove("is-show")
-                        elemBody.style.maxHeight = null
-                    }
-                }
+//                         elem.classList.remove("is-show")
+//                         elemHeader.classList.remove("is-show")
+//                         elemBody.style.maxHeight = null
+//                     }
+//                 }
     
-                accBody.style.maxHeight = accBody.scrollHeight + "px"
-                accContainer.style.maxHeight = parseInt(accContainer.scrollHeight) + accBody.scrollHeight + "px"
-            }
-        }
-    }
-}
+//                 accBody.style.maxHeight = accBody.scrollHeight + "px"
+//                 accContainer.style.maxHeight = parseInt(accContainer.scrollHeight) + accBody.scrollHeight + "px"
+//             }
+//         }
+//     }
+// }
 //========================================================================================================================================================
 
+class Accordion {
+    constructor() {
+        
+    }
+}
 
 /**
  * Модальное окно 
