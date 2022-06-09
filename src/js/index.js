@@ -5,7 +5,11 @@ import DismalModules from "./utils/modules.js"
 // DismalModules.acc()
 
 // Модальные окна
-// const modals = new DismalModules.Modals()
+const modals = new DismalModules.Modals()
+
+document.addEventListener('modal-open', e => {
+    console.log('modal-open')
+})
 
 // Табы
 // DismalModules.tabs()

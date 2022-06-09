@@ -79,9 +79,15 @@ export function acc() {
  * updateOpeningBtnList() - метод, обновляющий список кнопок (this.openingBtnList)
  * 
  * 
- * TODO: Атрибуты data-modal-hash и data-modal-hash-history. В случае если this.useHash === false:
+ * TODO: 
+ * (Атрибуты data-modal-hash и data-modal-hash-history. В случае если this.useHash === false)
  * data-modal-hash - указывается у модалки, которая должна открываться по хешу
  * data-modal-hash-history - указывается у модалки, которая должна быть сохранена в истории ( использовать вместе с первым атрибутом )
+ * Прописать возомжные ошибки
+ * Сделать анимацию появления с помощью js
+ * Если указан id модалки при загрузке страницы, то модалка должна открываться без плавной анимации
+ * События у модалок
+ * Если при this.useHash = true, до открытия модалки в url был указан хеш не принадлежащий ни к одной модалке, то при закрытии модалки в url должен указываться тот самый хеш
  */
 export class Modals {
     attrs = {
@@ -148,7 +154,7 @@ export class Modals {
         if (this.modalShow.dataset.closeOnBg != undefined) {
             this._modalBg.removeEventListener('click', this._bgEvent)
         }
-        
+
         this.modalIsShow = false
         this.modalShow = null
         this.modalShowId = null
@@ -217,7 +223,7 @@ export class Modals {
         const hash = window.location.hash.replace('#', '')
         this.hash = (hash === '') ? null : hash
     
-        if (hash != '') {
+        if (hash != '' && document.querySelector(`[data-modal-id=${hash}]`)) {
             this.open(hash)
         }
         if (hash === '' && this.historyHash && this.modalShow) {
@@ -227,7 +233,7 @@ export class Modals {
 
     // Установка хеша, равного id модалки
     setHash() {
-        const href = location.href + '#' + this.modalShowId
+        const href = location.origin + location.pathname + '#' + this.modalShowId
         history[this.historyHash ? 'pushState' : 'replaceState']({}, '', href)
     }
 
@@ -454,7 +460,6 @@ export function onlyDigit() {
 
 export default {
     acc,
-    // modal,
     tabs,
     labelTextfield,
     select,

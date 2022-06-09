@@ -15,16 +15,6 @@ export function removeAllClasses(items, itemClass) {
 }
 //========================================================================================================================================================
 
-// Удаляет у элемента item класс itemClass
-export function removeClass(item, itemClass) {
-    if (typeof item == "string") {
-        item = document.querySelectorAll(item)
-    }
-
-    item.classList.remove(itemClass)
-}
-//========================================================================================================================================================
-
 
 // Получаем все соседние элементы
 export function getSiblings(elem) {
@@ -89,10 +79,10 @@ export let bodyLockToggle = (delay = 100) => {
 export let bodyUnlock = (delay = 100) => {
 	let body = document.querySelector("body");
 	if (bodyLockStatus) {
-		let lock_padding = document.querySelectorAll("[data-lp]");
+		let lockPadding = document.querySelectorAll("[data-lp]");
 		setTimeout(() => {
-			for (let index = 0; index < lock_padding.length; index++) {
-				const el = lock_padding[index];
+			for (let index = 0; index < lockPadding.length; index++) {
+				const el = lockPadding[index];
 				el.style.paddingRight = '0px';
 			}
 			body.style.paddingRight = '0px';
