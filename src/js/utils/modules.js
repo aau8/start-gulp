@@ -1,82 +1,136 @@
 import { bodyLock, bodyUnlock, bodyLockToggle, removeAllClasses, getSiblings } from './functions.js'
 
-// Аккордеон
-// data-acc-toggle - кнопка при клике по которой показывается/скрывается тело аккордеона
-// data-acc-body - тело аккордеона
-// data-acc-hidden-sibling - аккордеоны будут скрываться при выборе других аккордеонов. !Атрибут указывается у контейнера (acc-list), в котором находятся аккордеоны
-// data-acc-open="<acc-id>" - указывать у элемента, при клике по которому будет открываться указанный аккордеон (в паре обязательно использовать data-acc-id)
-// data-acc-id="<acc-id>" - указывать у аккордеона, если планируется использовать data-acc-open. А так, необязательно
-export function acc() {
-    window.addEventListener("click", accDo)
-    
-    function accDo(e) {
-        const dataAccOpen = e.target.getAttribute('data-acc-open')
-
-        if (e.target.getAttribute('data-acc-toggle') || e.target.closest('[data-acc-toggle]') || dataAccOpen != null) {
-            const accToggle = dataAccOpen != null ? document.querySelector(`[data-acc-id=${dataAccOpen}] [data-acc-toggle]`) : e.target
-            const accContainer = !accToggle.closest("[data-acc-body]") ? accToggle.parentElement.parentElement : accToggle.closest("[data-acc-body]")
-            const accElem = accToggle.parentElement
-            const accBody = accToggle.nextElementSibling
-        
-            if (accBody.style.maxHeight) {
-                accBody.style.maxHeight = null
-                accElem.classList.remove("is-show")
-            } 
-            else {
-                const adjacentElems = getSiblings(accElem)
-                const accHiddenSibling = accContainer.dataset.accHiddenSibling
-    
-                accElem.classList.add("is-show")
-    
-                if (accHiddenSibling != undefined && accHiddenSibling != 'false') {
-    
-                    for (let i = 0; i < adjacentElems.length; i++) {
-                        const elem = adjacentElems[i]
-                        const elemHeader = elem.querySelector("[data-acc-toggle]")
-                        const elemBody = elem.querySelector("[data-acc-body]")
-    
-                        elem.classList.remove("is-show")
-                        elemHeader.classList.remove("is-show")
-                        elemBody.style.maxHeight = null
-                    }
-                }
-    
-                accBody.style.maxHeight = accBody.scrollHeight + "px"
-                accContainer.style.maxHeight = parseInt(accContainer.scrollHeight) + accBody.scrollHeight + "px"
-            }
-        }
-    }
-}
-//========================================================================================================================================================
 
 /**
- * Аккордион
+ * Аккордеон
  * 
- * Основной функционал:
- * Открытие/закрытие аккордеона
- * При открытии аккордеона, закрываются все соседнии.
+ * INFO: Атрибуты
+ * data-acc-container - контейнер с аккордеонами
+ * data-acc-hidden-sibling - (указывать у контейнера) если указан, при открытии аккордеона, все сосоднии будут закрываться
+ * data-acc="<id-acc || Null>" - этот атрибут должен иметь элемент, являющийся аккордеоном
+ * data-acc-toggler - элемент внутри аккордеона, открывающий его
+ * data-acc-body - тело аккордеона
+ * data-acc-opener="<id-acc>" - внешняя кнопка, открывающая аккордеон.
+ * 
+ * 
+ * TODO: Что еще можно сделать
+ * this.prevAcc - предыдущий аккордеон
+ * this.update() - Функционал обновления аккордеонов
+ * События
+ * Сделать возможность не указывать атрибут у контейнера. В этом случае, контейнером будет являться родитель аккордеонов
+ * Подумать надо объединением opener и toggler. Они выполняют примерно один и тот же функционал
+ * this.toggle(<id-acc>) - если аккордеон открыт, он закроется. Если закрыт, он закроется
  */
 export class Accordions {
-    constructor() {
-
-        this.init()
+    attrs = {
+        container: 'data-acc-container',
+        hiddenSibling: 'data-acc-hidden-sibling',
+        acc: 'data-acc',
+        toggler: 'data-acc-toggler',
+        body: 'data-acc-body',
+        opener: 'data-acc-opener',
     }
 
-    init() {
-
+    classNames = {
+        open: 'is-open'
     }
 
-    open() {
+    _currentAcc = {}
+    
+    accArr = []
+    hiddenSibling = false
+    
 
+    constructor(selector) {
+        this.init(selector)
     }
 
-    close() {
+    init(selector) {
+        let _accArr = Array.from(selector != null ? typeof(selector) === 'string' ? document.querySelectorAll(selector) : selector : document.querySelectorAll(`[${this.attrs.container}]`))
+        this.accArr = _accArr.map(e => Array.from(e.querySelectorAll(`[${this.attrs.acc}]`)))
+        this._combAccArr = Array().concat(...this.accArr)
+        this._combAccArr.forEach(_acc => this.close(_acc, false))
+        this._clickToggler()
+        this._outsideOpener()
+    }
 
+    open(selector) {
+        const _acc = selector === undefined ? this._currentAcc.acc : typeof(selector) === 'string' ? document.querySelector(selector) : selector
+
+        if (_acc.classList.contains(this.classNames.open)) return
+        
+        this._setCurrentAcc(_acc)
+
+        if (this.hiddenSibling || this._currentAcc.container.hasAttribute(`${this.attrs.hiddenSibling}`)) {
+            const _accElems = Array.from(this._currentAcc.container.querySelectorAll(`[${this.attrs.acc}]`))
+
+            _accElems.forEach(_acc => {
+                if (_acc.classList.contains(this.classNames.open)) {
+                    this.close(_acc, false)
+                }
+            })
+        }
+
+        this._currentAcc.acc.classList.add(this.classNames.open)
+        this._currentAcc.body.style = `
+            max-height: ${this._currentAcc.body.scrollHeight}px;
+            opacity: 1;
+            visibility: visible;
+        `
+    }
+
+    close(selector, makeCurrent = false) {
+        const _acc = selector === undefined ? this._currentAcc.acc : typeof(selector) === 'string' ? document.querySelector(selector) : selector
+        const _body = selector === undefined ? this._currentAcc.body : _acc.querySelector(`[${this.attrs.body}]`)
+        if (makeCurrent) this._setCurrentAcc(_acc)
+        
+        _acc.classList.remove(this.classNames.open)
+        _body.style = `
+            max-height: 0;
+            opacity: 0;
+            visibility: hidden;
+        `
+    }
+
+    _outsideOpener() {
+        document.addEventListener('click', e => {
+
+            if (e.target.hasAttribute(this.attrs.opener) || e.target.closest(`[${this.attrs.opener}]`)) {
+                const _opener = e.target.hasAttribute(this.attrs.opener) ? e.target : e.target.closest(`[${this.attrs.opener}]`)
+                const _acc = document.querySelector(`[${this.attrs.acc}=${_opener.getAttribute(this.attrs.opener)}]`)
+
+                this.open(_acc)
+            }
+        })
+    }
+
+    _clickToggler() {
+        this._combAccArr.forEach(_acc => {
+            const _toggler = _acc.querySelector(`[${this.attrs.toggler}]`)
+            
+            _toggler.addEventListener('click', e => {
+                this._setCurrentAcc(_acc)
+
+                if (!_acc.classList.contains(this.classNames.open)) {
+                    this.open()
+                }
+                else {
+                    this.close()
+                }
+            })
+        })
+    }
+
+    _setCurrentAcc(_acc) {
+        this._currentAcc.container = _acc.closest(`[${this.attrs.container}]`)
+        this._currentAcc.acc = _acc
+        this._currentAcc.toggler = _acc.querySelector(`[${this.attrs.toggler}]`)
+        this._currentAcc.body = _acc.querySelector(`[${this.attrs.body}]`)
     }
 }
 
 /**
- * Модальное окно 
+ * Модальное окно
  * 
  * INFO: Атрибуты (все атрибуты находятся в св-ве attrs)
  * data-modal-id="<id-modal>" - (modalId) каждая модалка имеет этот атрибут, в котором мы указываем ее id
@@ -105,14 +159,14 @@ export class Accordions {
  * updateOpeningBtnList() - метод, обновляющий список кнопок (this.openingBtnList)
  * 
  * 
- * TODO: 
+ * TODO: Что еще можно сделать
  * (Атрибуты data-modal-hash и data-modal-hash-history. В случае если this.useHash === false)
  * data-modal-hash - указывается у модалки, которая должна открываться по хешу
  * data-modal-hash-history - указывается у модалки, которая должна быть сохранена в истории ( использовать вместе с первым атрибутом )
  * Прописать возомжные ошибки
- * Сделать анимацию появления с помощью js
+ * Анимацию появления с помощью js
  * Если указан id модалки при загрузке страницы, то модалка должна открываться без плавной анимации
- * События у модалок
+ * События
  * Если при this.useHash = true, до открытия модалки в url был указан хеш не принадлежащий ни к одной модалке, то при закрытии модалки в url должен указываться тот самый хеш
  */
 export class Modals {
@@ -138,14 +192,6 @@ export class Modals {
     
     constructor(options) {
         this._init()
-    }
-
-    // Инизиализация Modal
-    _init() {
-        this._btnOpen()
-        this._btnClose()
-        if (this.keyEsc) this._keyEscClose()
-        if (this.useHash) this._watchHash()
     }
 
     // Открыть модальное окно
@@ -187,6 +233,14 @@ export class Modals {
         
         modal.classList.remove(this.classNames.modalShow)
         bodyUnlock()
+    }
+
+    // Инизиализация Modal
+    _init() {
+        this._btnOpen()
+        this._btnClose()
+        if (this.keyEsc) this._keyEscClose()
+        if (this.useHash) this._watchHash()
     }
     
     // Открыть модалку при клике по кнопке c атрибутом this.attrs.btnModalOpen
@@ -485,9 +539,8 @@ export function onlyDigit() {
 
 
 export default {
-    acc,
-    Modals,
     Accordions,
+    Modals,
     tabs,
     labelTextfield,
     select,
