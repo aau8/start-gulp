@@ -3,7 +3,8 @@
     height: 100%;
     display: grid;
     grid-template-columns: 1fr;
-    gap: 16px
+    gap: 8px;
+    margin: 32px 0;
 }
 
 .acc {
@@ -42,7 +43,7 @@
     font-size: 16px;
     font-weight: 100;
     line-height: 1.3;
-    pointer-events: none;
+    // pointer-events: none;
     transition: $tr;
 }
 
@@ -58,10 +59,10 @@
 
 // Тело аккордеона
 .acc__body {
-    max-height: 0;
+    // max-height: 0;
+    // opacity: 0;
+    // visibility: hidden;
     overflow: hidden;
-    opacity: 0;
-    visibility: hidden;
     transition: $tr;
 }
 
