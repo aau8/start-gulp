@@ -16,6 +16,13 @@ export function removeAllClasses(items, itemClass) {
 //========================================================================================================================================================
 
 
+// Создает Array из NodeList и возвращает его
+export function nodeArray(selector, parent = document) {
+	return Array.from(parent.querySelectorAll(selector))
+}
+//========================================================================================================================================================
+
+
 // Получаем все соседние элементы
 export function getSiblings(elem) {
     var siblings = []

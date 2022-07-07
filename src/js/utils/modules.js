@@ -3,7 +3,7 @@ import { bodyLock, bodyUnlock, bodyLockToggle, removeAllClasses, getSiblings } f
 
 /**
  * Аккордеон
- * 
+ *
  * INFO: Атрибуты
  * data-acc-container - контейнер с аккордеонами
  * data-acc-hidden-sibling - (указывать у контейнера) если указан, при открытии аккордеона, все сосоднии будут закрываться
@@ -11,8 +11,8 @@ import { bodyLock, bodyUnlock, bodyLockToggle, removeAllClasses, getSiblings } f
  * data-acc-toggler - элемент внутри аккордеона, открывающий его
  * data-acc-body - тело аккордеона
  * data-acc-opener="<id-acc>" - внешняя кнопка, открывающая аккордеон.
- * 
- * 
+ *
+ *
  * TODO: Что еще можно сделать
  * this.prevAcc - предыдущий аккордеон
  * this.update() - Функционал обновления аккордеонов
@@ -36,17 +36,17 @@ export class Accordions {
     }
 
     _currentAcc = {}
-    
+
     accArr = []
     hiddenSibling = false
-    
+
 
     constructor(selector) {
         this.init(selector)
     }
 
     init(selector) {
-        let _accArr = Array.from(selector != null ? typeof(selector) === 'string' ? document.querySelectorAll(selector) : selector : document.querySelectorAll(`[${this.attrs.container}]`))
+        let _accArr = Array.from( null !== selector ? typeof(selector) === 'string' ? document.querySelectorAll(selector) : selector : document.querySelectorAll(`[${this.attrs.container}]`))
         this.accArr = _accArr.map(e => Array.from(e.querySelectorAll(`[${this.attrs.acc}]`)))
         this._combAccArr = Array().concat(...this.accArr)
         this._combAccArr.forEach(_acc => this.close(_acc, false))
@@ -58,7 +58,7 @@ export class Accordions {
         const _acc = selector === undefined ? this._currentAcc.acc : typeof(selector) === 'string' ? document.querySelector(selector) : selector
 
         if (_acc.classList.contains(this.classNames.open)) return
-        
+
         this._setCurrentAcc(_acc)
 
         if (this.hiddenSibling || this._currentAcc.container.hasAttribute(`${this.attrs.hiddenSibling}`)) {
@@ -83,7 +83,7 @@ export class Accordions {
         const _acc = selector === undefined ? this._currentAcc.acc : typeof(selector) === 'string' ? document.querySelector(selector) : selector
         const _body = selector === undefined ? this._currentAcc.body : _acc.querySelector(`[${this.attrs.body}]`)
         if (makeCurrent) this._setCurrentAcc(_acc)
-        
+
         _acc.classList.remove(this.classNames.open)
         _body.style = `
             max-height: 0;
@@ -107,7 +107,7 @@ export class Accordions {
     _clickToggler() {
         this._combAccArr.forEach(_acc => {
             const _toggler = _acc.querySelector(`[${this.attrs.toggler}]`)
-            
+
             _toggler.addEventListener('click', e => {
                 this._setCurrentAcc(_acc)
 
@@ -123,7 +123,7 @@ export class Accordions {
 
     _setCurrentAcc(_acc) {
         this._currentAcc.container = _acc.closest(`[${this.attrs.container}]`)
-        this._currentAcc.acc = _acc
+        this._curren,tAcc.acc = _acc
         this._currentAcc.toggler = _acc.querySelector(`[${this.attrs.toggler}]`)
         this._currentAcc.body = _acc.querySelector(`[${this.attrs.body}]`)
     }
@@ -131,13 +131,13 @@ export class Accordions {
 
 /**
  * Модальное окно
- * 
+ *
  * INFO: Атрибуты (все атрибуты находятся в св-ве attrs)
  * data-modal-id="<id-modal>" - (modalId) каждая модалка имеет этот атрибут, в котором мы указываем ее id
  * data-close-on-bg - (modalCloseOnBg) модалка, которая должна закрываться при клике по ее фону, должна иметь этот атрибут
  * data-modal-open="<id-modal>" - (btnModalOpen) имеет элемент, при нажатии на который открывается модалка
  * data-modal-close="<id-modal || Null>" - (btnModalClose) имеет элемент, при нажатии на который, модальное окно закрывается. Если елемент находится внутри модалки, которую он должен закрыть, в значении атрибута указывать id модалки необязательно (можно оставить его пустым). Значение стоит указывать, если элемент, который должен закрыть модалку, находится вне контейнера с атрибутом data-modal-id
- * 
+ *
  * INFO: Свойства
  * attrs - (Object) названия атрибутов
  * classNames - (Object) названия классов
@@ -150,15 +150,15 @@ export class Accordions {
  * useHash - (Boolean) использовать хеш. Если в url указан хеш равный id модалки, модалка откроется. По умолчанию - true
  * historyHash - (Boolean) сохранять хеш в истории браузера. Если useHash === false, то historyHash будет равен false. По умолчанию - false
  * hash - (String) значение хеша
- * 
+ *
  * INFO: Функции
  * open(<String || Element>) - метод, открывающий модалку
  * close(<String || Element || Null>) - метод, закрывающий модалку. Если скобки оставить пустыми, закроется открытая модалка
  * update() - метод, обновляющий список модалок (this.modalList) и список кнопок (this.openingBtnList)
  * updateModalList() - метод, обновляющий список модалок (this.modalList)
  * updateOpeningBtnList() - метод, обновляющий список кнопок (this.openingBtnList)
- * 
- * 
+ *
+ *
  * TODO: Что еще можно сделать
  * (Атрибуты data-modal-hash и data-modal-hash-history. В случае если this.useHash === false)
  * data-modal-hash - указывается у модалки, которая должна открываться по хешу
@@ -191,13 +191,13 @@ export class Modals {
     useHash = true
     historyHash = !this.useHash ? false : false
     hash = null
-    
+
     constructor(options) {
         this._init()
     }
 
     // Открыть модальное окно
-    open(modal) {        
+    open(modal) {
         if (typeof modal === 'string') {
             modal = document.querySelector(`[${this.attrs.modalId}=${modal}]`)
         }
@@ -205,7 +205,7 @@ export class Modals {
         this.modalIsShow = true
         this.modalShow = modal
         this.modalShowId = modal.dataset.modalId
-        
+
         this._modalBgClose()
         modal.classList.add(this.classNames.modalShow)
         bodyLock()
@@ -232,7 +232,7 @@ export class Modals {
         this.modalIsShow = false
         this.modalShow = null
         this.modalShowId = null
-        
+
         modal.classList.remove(this.classNames.modalShow)
         bodyUnlock()
     }
@@ -260,13 +260,13 @@ export class Modals {
         if (this.keyEsc) this._keyEscClose()
         if (this.useHash) this._watchHash()
     }
-    
+
     // Открыть модалку при клике по кнопке c атрибутом this.attrs.btnModalOpen
     _btnOpen() {
         document.addEventListener('click', e => {
             if (e.target.dataset.modalOpen != undefined || e.target.closest(`[${this.attrs.btnModalOpen}]`)) {
                 const btnOpenModal = e.target.dataset.modalOpen != undefined ? e.target : e.target.closest(`[${this.attrs.btnModalOpen}]`)
-    
+
                 this.open(btnOpenModal.dataset.modalOpen)
                 if (this.useHash) this._setHash()
             }
@@ -315,12 +315,12 @@ export class Modals {
             })
         }
     }
-    
+
     // Проверка хеша
     _checkHash() {
         const hash = window.location.hash.replace('#', '')
         this.hash = (hash === '') ? null : hash
-    
+
         if (hash != '' && document.querySelector(`[data-modal-id=${hash}]`)) {
             this.open(hash)
         }
@@ -355,7 +355,7 @@ export function tabs() {
         const tab = tabElems[i];
         const btnElems = tab.querySelectorAll('[data-tab-btn]')
         const allCards = tab.querySelectorAll('[data-tab-card]')
-    
+
         for (let i = 0; i < btnElems.length; i++) {
             const btn = btnElems[i];
 
@@ -372,14 +372,14 @@ export function tabs() {
                 if (btnData === 'all') {
                     for (let i = 0; i < allCards.length; i++) {
                         const card = allCards[i];
-                        
+
                         card.classList.add('is-show')
                     }
                 }
                 else {
                     for (let i = 0; i < cardElems.length; i++) {
                         const card = cardElems[i];
-                        
+
                         card.classList.add('is-show')
                     }
                 }
@@ -406,7 +406,7 @@ export function tabs() {
 
 class Tabs {
     constructor() {
-        
+
     }
 }
 
@@ -425,7 +425,7 @@ export function labelTextfield(container = document) {
         input.addEventListener('focus', e => {
             textfield.classList.add('has-change-label')
         })
-        
+
         input.addEventListener('blur', e => {
             if (input.value === '') {
                 textfield.classList.remove('has-change-label')
@@ -458,7 +458,7 @@ export function select() {
 
         // Если пользователь кликнул вне зоны селекта
         if (!target.classList.contains('select') && !target.closest('.select.is-open')) {
-            
+
             if (document.querySelector('.select.is-open')) {
                 document.querySelector('.select.is-open').classList.remove('is-open')
             }
@@ -501,13 +501,13 @@ export function arrowUp() {
 // Фиксация элемента с position: fixed над подвалом (чтобы не загораживал контент в подвале)
 export function fixElemOverFooter(elem) {
     const footer = document.querySelector('footer')
-    
+
     window.addEventListener('scroll', fixElem)
-    
+
     fixElem()
     function fixElem() {
         const footerPageY = footer.getBoundingClientRect().top
-        
+
         if (footerPageY - window.innerHeight < 0) {
             if (!elem.classList.contains('is-fixed')) {
                 elem.style.position = 'absolute'
@@ -529,7 +529,7 @@ export function onlyDigit() {
 
     for (let i = 0; i < inputDigitElems.length; i++) {
         const input = inputDigitElems[i];
-        
+
         input.addEventListener('keydown', e => {
             if (e.key.search(/[\d\.]/)) {
                 e.preventDefault()
