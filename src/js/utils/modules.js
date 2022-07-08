@@ -184,6 +184,7 @@ export class Modals {
     }
     modalList = document.querySelectorAll(`[${this.attrs.modalId}]`)
     openingBtnList = document.querySelectorAll(`[${this.attrs.btnModalOpen}]`)
+	openBtn = null
     modalIsShow = false
     modalShow = null
     modalShowId = null
@@ -209,6 +210,12 @@ export class Modals {
         this._modalBgClose()
         modal.classList.add(this.classNames.modalShow)
         bodyLock()
+
+		// Событие открытия модалки
+		const _eModalOpenStart = new Event('modal-open')
+		_eModalOpenStart.data = { ...this }
+
+		modal.dispatchEvent( _eModalOpenStart )
     }
 
     // Закрыть модальное окно
@@ -228,6 +235,12 @@ export class Modals {
         if (this.modalShow.dataset.closeOnBg != undefined) {
             this._modalBg.removeEventListener('click', this._bgEvent)
         }
+
+		// Событие закрытия модалки
+		const _eModalOpenClose = new Event('modal-close')
+		_eModalOpenStart.data = { ...this }
+
+		modal.dispatchEvent( _eModalOpenClose )
 
         this.modalIsShow = false
         this.modalShow = null
@@ -266,6 +279,8 @@ export class Modals {
         document.addEventListener('click', e => {
             if (e.target.dataset.modalOpen != undefined || e.target.closest(`[${this.attrs.btnModalOpen}]`)) {
                 const btnOpenModal = e.target.dataset.modalOpen != undefined ? e.target : e.target.closest(`[${this.attrs.btnModalOpen}]`)
+
+				this.openBtn = btnOpenModal
 
                 this.open(btnOpenModal.dataset.modalOpen)
                 if (this.useHash) this._setHash()
