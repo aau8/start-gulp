@@ -3,11 +3,23 @@ import DismalModules from "./utils/modules.js"
 
 // Аккордеон
 // DismalModules.acc()
+const modal2 = document.querySelector('[data-modal-id=modal2]')
+modal2.addEventListener('modal-open', e => {
+	const openBtn = e.data.openBtn
 
+	// console.log(openBtn.dataset.videoSrc)
+	console.log(e)
+})
 // Модальные окна
 const modals = new DismalModules.Modals()
 
-console.log(modals)
+// console.log(modals)
+
+// const btn2 = document.querySelector('[data-modal-open="modal2"]')
+
+// console.log(modal2)
+
+
 // modals.open('modal')
 // console.log(typeof modals.modalShow)
 // Табы
