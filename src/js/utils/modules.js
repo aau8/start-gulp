@@ -419,12 +419,6 @@ export function tabs() {
 //========================================================================================================================================================
 
 
-class Tabs {
-    constructor() {
-
-    }
-}
-
 // Плейсхолдер текстовых полей
 export function labelTextfield(container = document) {
     const textfieldElems = container.querySelectorAll('.tf')
